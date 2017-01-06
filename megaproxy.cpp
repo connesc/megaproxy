@@ -10,16 +10,8 @@
 using namespace mega;
 using namespace std;
 
-MegaApi* megaApi;
-
 class SynchronousRequestListener : public MegaRequestListener {
 	public:
-		SynchronousRequestListener() {
-			request = NULL;
-			error = NULL;
-			notified = false;
-		}
-
 		~SynchronousRequestListener() {
 			delete request;
 			delete error;
@@ -49,18 +41,18 @@ class SynchronousRequestListener : public MegaRequestListener {
 			notified = false;
 		}
 
-		MegaRequest *getRequest() {
+		const MegaRequest *getRequest() const {
 			return request;
 		}
 
-		MegaError *getError() {
+		const MegaError *getError() const {
 			return error;
 		}
 
 	private:
-		bool notified;
-		MegaError *error;
-		MegaRequest *request;
+		bool notified = false;
+		const MegaError *error = NULL;
+		const MegaRequest *request = NULL;
 		condition_variable cv;
 		mutex m;
 };
@@ -92,12 +84,12 @@ int main(int argc, char *argv[]) {
 		megapassword = argv[2];
 	}
 
-	megaApi = new MegaApi("CBMQALQS", (const char *)NULL, "HTTP proxy for mega.nz");
-	megaApi->setLogLevel(MegaApi::LOG_LEVEL_INFO);
+	MegaApi megaApi = MegaApi("CBMQALQS", (const char *)NULL, "HTTP proxy for mega.nz");
+	megaApi.setLogLevel(MegaApi::LOG_LEVEL_INFO);
 
 	// Login
 	SynchronousRequestListener listener;
-	megaApi->login(megauser.c_str(), megapassword.c_str(), &listener);
+	megaApi.login(megauser.c_str(), megapassword.c_str(), &listener);
 	listener.wait();
 	if (listener.getError()->getErrorCode() != MegaError::API_OK) {
 		MegaApi::log(MegaApi::LOG_LEVEL_ERROR, "Login error");
@@ -107,7 +99,7 @@ int main(int argc, char *argv[]) {
 
 	// Fetch nodes
 	listener.reset();
-	megaApi->fetchNodes(&listener);
+	megaApi.fetchNodes(&listener);
 	listener.wait();
 	if (listener.getError()->getErrorCode() != MegaError::API_OK) {
 		MegaApi::log(MegaApi::LOG_LEVEL_ERROR, "Error fetchning nodes");
@@ -115,10 +107,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	MegaApi::log(MegaApi::LOG_LEVEL_INFO, "MEGA initialization complete!");
-	megaApi->setLogLevel(MegaApi::LOG_LEVEL_WARNING);
+	megaApi.setLogLevel(MegaApi::LOG_LEVEL_WARNING);
 
-	megaApi->httpServerSetRestrictedMode(MegaApi::HTTP_SERVER_ALLOW_ALL);
-	megaApi->httpServerEnableFolderServer(true);
-	megaApi->httpServerStart();
+	megaApi.httpServerSetRestrictedMode(MegaApi::HTTP_SERVER_ALLOW_ALL);
+	megaApi.httpServerEnableFolderServer(true);
+	megaApi.httpServerStart();
 	pause();
 }
