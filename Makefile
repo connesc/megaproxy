@@ -1,5 +1,5 @@
 CXXFLAGS = -g -std=c++11 -Wall -Wextra -Werror
-LIBS = -lmega
+LIBS = -lmega -lboost_program_options
 
 .PHONY: clean
 
