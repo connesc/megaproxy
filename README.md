@@ -3,7 +3,7 @@
 > HTTP proxy for mega.nz
 
 This is just a wrapper program. The core feature is actually implemented by the [official mega.nz SDK](https://github.com/meganz/sdk).
-See [here](https://github.com/meganz/sdk/blob/v2.8.0/include/megaapi.h#L7881) for more details.
+See [here](https://github.com/meganz/sdk/blob/v3.0.0/include/megaapi.h#L8719) for more details.
 
 ## Usage
 
@@ -37,6 +37,12 @@ Note: the mega.nz SDK must be built with libuv support. This can be done like th
 ./configure CXXFLAGS=-DHAVE_LIBUV=1 LDFLAGS=-luv
 make
 ```
+
+## Installation
+
+Arch Linux users can install the [megaproxy package](https://aur.archlinux.org/packages/megaproxy) from the AUR.
+
+Other users can simply build the binary with `make` (assuming the above dependencies are installed).
 
 ## License
 
