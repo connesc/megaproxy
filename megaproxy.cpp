@@ -1,6 +1,4 @@
 #include <unistd.h>
-#include <mutex>
-#include <condition_variable>
 #include <iostream>
 #include <fstream>
 #include <boost/program_options.hpp>
@@ -12,53 +10,6 @@ using namespace mega;
 using namespace std;
 
 namespace po = boost::program_options;
-
-class SynchronousRequestListener : public MegaRequestListener {
-	public:
-		~SynchronousRequestListener() {
-			delete request;
-			delete error;
-		}
-
-		void onRequestFinish(MegaApi *, MegaRequest *request, MegaError *error) {
-			this->error = error->copy();
-			this->request = request->copy();
-
-			{
-				unique_lock<mutex> lock(m);
-				notified = true;
-			}
-			cv.notify_all();
-		}
-
-		void wait() {
-			unique_lock<mutex> lock(m);
-			cv.wait(lock, [this]{return notified;});
-		}
-
-		void reset() {
-			delete request;
-			delete error;
-			request = NULL;
-			error = NULL;
-			notified = false;
-		}
-
-		const MegaRequest *getRequest() const {
-			return request;
-		}
-
-		const MegaError *getError() const {
-			return error;
-		}
-
-	private:
-		bool notified = false;
-		const MegaError *error = NULL;
-		const MegaRequest *request = NULL;
-		condition_variable cv;
-		mutex m;
-};
 
 int main(int argc, char *argv[]) {
 	// Parse options
@@ -137,7 +88,6 @@ int main(int argc, char *argv[]) {
 	MegaApi::log(MegaApi::LOG_LEVEL_INFO, "Login OK. Fetching nodes");
 
 	// Fetch nodes
-	listener.reset();
 	megaApi.fetchNodes(&listener);
 	listener.wait();
 	if (listener.getError()->getErrorCode() != MegaError::API_OK) {
