@@ -28,8 +28,8 @@ RUN cd /usr/src \
 	&& make install DESTDIR=/usr/src/output
 
 RUN cd /usr/src \
-	&& curl -L https://github.com/connesc/megaproxy/archive/v0.2.0.tar.gz | tar xz \
-	&& cd megaproxy-0.2.0 \
+	&& curl -L https://github.com/connesc/megaproxy/archive/v0.2.1.tar.gz | tar xz \
+	&& cd megaproxy-0.2.1 \
 	&& CPPFLAGS=-I/usr/src/output/include LDFLAGS=-L/usr/src/output/lib make \
 	&& install -D -m755 megaproxy /usr/src/output/usr/bin/megaproxy
 
