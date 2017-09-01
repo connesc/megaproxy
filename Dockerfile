@@ -30,7 +30,7 @@ RUN cd /usr/src \
 RUN cd /usr/src \
 	&& curl -L https://github.com/connesc/megaproxy/archive/v0.2.1.tar.gz | tar xz \
 	&& cd megaproxy-0.2.1 \
-	&& CPPFLAGS=-I/usr/src/output/include LDFLAGS=-L/usr/src/output/lib make \
+	&& make \
 	&& install -D -m755 megaproxy /usr/src/output/usr/bin/megaproxy
 
 FROM debian:9
