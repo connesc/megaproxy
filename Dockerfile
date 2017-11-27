@@ -19,8 +19,8 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN cd /usr/src \
-	&& curl -L https://github.com/meganz/sdk/archive/v3.1.9.tar.gz | tar xz \
-	&& cd sdk-3.1.9 \
+	&& curl -L https://github.com/meganz/sdk/archive/v3.2.7.tar.gz | tar xz \
+	&& cd sdk-3.2.7 \
 	&& ./autogen.sh \
 	&& ./configure --with-libuv --disable-sync --disable-examples --disable-megacmd --prefix /usr \
 	&& make \
