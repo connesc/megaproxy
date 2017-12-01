@@ -3,7 +3,7 @@
 > HTTP proxy for mega.nz
 
 This is just a wrapper program. The core feature is actually implemented by the [official mega.nz SDK](https://github.com/meganz/sdk).
-See [here](https://github.com/meganz/sdk/blob/v3.0.0/include/megaapi.h#L8719) for more details.
+See [here](https://github.com/meganz/sdk/blob/v3.2.7/include/megaapi.h#L9824) for more details.
 
 ## Usage
 
