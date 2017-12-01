@@ -4,7 +4,7 @@ LIBS = -lmega -lboost_program_options
 .PHONY: clean
 
 megaproxy: megaproxy.cpp
-	g++ $(CXXFLAGS) $(LIBS) -o $@ $^
+	g++ $(CXXFLAGS) $^ $(LIBS) -o $@
 
 clean:
 	rm -f megaproxy
